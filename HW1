@@ -12,7 +12,6 @@ x_test = np.float32( MNIST_data['x_test'][:] )
 y_test = np.int32( np.array( MNIST_data['y_test'][:,0]))
 MNIST_data.close()
 
-# Implementation of stochastic gradient descent algorithm
 dH=100 # number of hidden units
 num_inputs = 28*28
 num_outputs = 10
@@ -23,8 +22,8 @@ model['W1'] = np.random.randn(dH, num_inputs) / np.sqrt(num_inputs)
 model['b1'] = np.zeros(dH)
 model['C'] =  np.random.randn(num_outputs, dH) / np.sqrt(dH)
 model['b2'] = np.zeros(num_outputs)
-
 model_grads = copy.deepcopy(model)
+
 
 def softmax_function(z):
     ZZ = np.exp(z)/np.sum(np.exp(z))
@@ -80,7 +79,7 @@ for epochs in range(num_epochs):
         h = relu_function(z)
         u = np.dot(model['C'], h) + model['b2']
         p = softmax_function(u)
-
+        
         prediction = np.argmax(p)
         if (prediction == y):
             total_correct += 1
