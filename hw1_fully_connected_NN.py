@@ -1,11 +1,12 @@
 import numpy as np
-
 import h5py
 import time
+import sys
 import copy
 from random import randint
 
-#Load MNIST data
+
+# Load MNIST data
 MNIST_data = h5py.File('F:\CS598\MNISTdata.hdf5', 'r')
 x_train = np.float32(MNIST_data['x_train'][:] )
 y_train = np.int32(np.array(MNIST_data['y_train'][:, 0]))
@@ -13,13 +14,10 @@ x_test = np.float32( MNIST_data['x_test'][:] )
 y_test = np.int32( np.array( MNIST_data['y_test'][:,0]))
 MNIST_data.close()
 
-#Implementation of stochastic gradient descent algorithm
-#number of hidden layers
-dH=100
-#number of inputs
-num_inputs = 28*28
-#number of outputs
-num_outputs = 10
+# Implementation of stochastic gradient descent algorithm
+dH=100 # number of hidden layers
+num_inputs = 28*28 # dimension of inputs
+num_outputs = 10 # dimension of outputs
 
 #initialisation
 model = {}
@@ -27,7 +25,6 @@ model['W1'] = np.random.randn(dH, num_inputs) / np.sqrt(num_inputs)
 model['b1'] = np.zeros(dH)
 model['C'] =  np.random.randn(num_outputs, dH) / np.sqrt(dH)
 model['b2'] = np.zeros(num_outputs)
-
 model_grads = copy.deepcopy(model)
 
 def softmax_function(z):
@@ -59,6 +56,7 @@ def backward(x, y, z, h, u, p, model, model_grads):
     model_grads['W1'] = np.dot(qb.reshape(len(qb), 1), x.reshape(1, num_inputs))
     return model_grads
 
+# Training
 time1 = time.time()
 LR = .01
 num_epochs = 20
@@ -99,8 +97,8 @@ for epochs in range(num_epochs):
 
 time2 = time.time()
 print(time2 - time1)
-######################################################
-# test data
+
+# test
 total_correct = 0
 for n in range(len(x_test)):
     y = y_test[n]
@@ -115,11 +113,8 @@ for n in range(len(x_test)):
         total_correct += 1
 test_accuracy = np.array([total_correct / np.float(len(x_test))])
 print(test_accuracy)
-######################################################
-#output results
-import sys
-import numpy as np
 
+# output results
 file_name1 = sys.path[0] + "\\train_accuracy.csv"
 file_name2 = sys.path[0] + "\\test_accuracy.csv"
 np.savetxt(file_name1, train_accuracy, delimiter=',')
