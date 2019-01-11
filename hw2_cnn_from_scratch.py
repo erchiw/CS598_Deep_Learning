@@ -4,8 +4,8 @@ import time
 import copy
 from random import randint
 
-##load MNIST data
-MNIST_data = h5py.File('F:\CS598\MNISTdata.hdf5', 'r')
+# load MNIST data
+MNIST_data = h5py.File('.\MNISTdata.hdf5', 'r')
 x_train = np.float32(MNIST_data['x_train'][:] )
 y_train = np.int32(np.array(MNIST_data['y_train'][:,0]))
 x_test = np.float32( MNIST_data['x_test'][:] )
@@ -135,8 +135,8 @@ for epochs in range(num_epochs):
 # test data
 total_correct = 0
 for n in range(len(x_test)):
-    y = y_train[n]
-    x = x_train[n][:]
+    y = y_test[n]
+    x = x_test[n][:]
     x_matrix = x.reshape((d, d))
 
     # Forward Step
