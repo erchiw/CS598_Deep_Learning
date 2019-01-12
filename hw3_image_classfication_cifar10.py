@@ -1,18 +1,18 @@
 import torch
-import torchvision
 import torch.nn as nn
 import torch.nn.functional as F
+import torchvision
 import torchvision.transforms as transforms
 import torch.optim as optim
 import os
 
-##Open file to store train and test error
+# Open file to store train and test error
 nameTra = os.getcwd() + "/" + "trainErr.txt"
 nameTes = os.getcwd() + "/" + "testErr.txt"
 trainErr = open(nameTra, "w")
 testErr = open(nameTes, "w")
 
-##Define dara augmentation method
+# Define data augmentation method
 rgb_mean = (0.5, 0.5, 0.5)
 rgb_std = (0.5, 0.5, 0.5)
 
@@ -25,7 +25,7 @@ train_transform = transforms.Compose([
 
 test_transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize(rgb_mean, rgb_std)])
 
-##load CIFAR10 data
+# Load CIFAR10 data
 trainset = torchvision.datasets.CIFAR10(root='./data', train=True,
                                         download=False, transform=train_transform)
 trainloader = torch.utils.data.DataLoader(trainset, batch_size=4,
@@ -36,7 +36,7 @@ testloader = torch.utils.data.DataLoader(testset, batch_size=4,
                                          shuffle=False, num_workers=2)
 classes = ('plane', 'car', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
 
-##Define Model Structure
+# Define Model Structure
 class CNNet(nn.Module):
     def __init__(self):
         super(CNNet, self).__init__()
@@ -81,19 +81,19 @@ class CNNet(nn.Module):
         x = self.fc2(x)
         return x
 
-##Create Model
+# Create Model
 net = CNNet()
 
-##Using Cuda
+# Using Cuda
 net.cuda()
 net = torch.nn.DataParallel(net, device_ids=range(torch.cuda.device_count()))
 torch.backends.cudnn.benchmark = True
 
-##Define Loss function and optimizer
+# Define Loss function and optimizer
 loss_function = nn.CrossEntropyLoss()
 optimizer = optim.Adam(net.parameters(), lr=0.001)
 
-##train the network
+# train the network
 num_epoch = 20
 
 for epoch in range(num_epoch):
@@ -130,8 +130,8 @@ for epoch in range(num_epoch):
 
 print("training finish")
 
-##Test model
 
+# Test model
 correct = 0.0
 alltest = 0.0
 
@@ -151,10 +151,10 @@ testErr.write(str(100 * correct / alltest)+",")
 
 print("all finish")
 
-##Save model
+# Save model
 torch.save(net.state_dict(), 'erchinet12.pt')
 
-##Close File
+# Close File
 testErr.close()
 trainErr.close()
 
