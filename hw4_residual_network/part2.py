@@ -1,3 +1,5 @@
+"""Image classification using pretrained model"""
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -6,9 +8,7 @@ import torchvision
 import torchvision.transforms as transforms
 import os
 
-
 file_dir = os.getcwd() + '/' + 'resnet18-5c106cde.pth'
-
 
 def resnet18(pretrained=True):
     model = torchvision.models.resnet.ResNet(torchvision.models.resnet.BasicBlock, [2, 2, 2, 2])
@@ -101,7 +101,7 @@ for epoch in range(num_epoches):
         _, predicted = torch.max(tra_outputs.data, 1)
         train_accuracy += (predicted == tra_labels).sum().item()
 
-    # test acc
+    # test accuracy
     with torch.no_grad():
         for tes_data in testloader:
             tes_image, tes_lab = tes_data
