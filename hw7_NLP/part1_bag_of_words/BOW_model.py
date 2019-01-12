@@ -34,5 +34,5 @@ class BOW_model(nn.Module):
         h = self.dropout(F.relu(self.bn_hidden(self.fc_hidden(bow_embedding))))
         h = self.fc_output(h)
     
-        return self.loss(h[:,0],t), h[:,0]
+        return self.loss(h[:,0],t), h[:,0] 
 
