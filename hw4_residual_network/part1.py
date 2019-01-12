@@ -8,7 +8,6 @@ import torchvision.transforms as transforms
 import torch.optim as optim
 import os
 
-
 # Define Model Structure
 class MyBasicBlock(nn.Module):
     def __init__(self, inChannel, outChannel, instride, inpadding):
@@ -128,7 +127,7 @@ for epoch in range(num_epoches):
         # input
         tra_inputs, tra_labels = data
 
-        # initilise optimizer
+        # initilize optimizer
         optimizer.zero_grad()
 
         # Forward
@@ -139,14 +138,12 @@ for epoch in range(num_epoches):
         loss = loss_function(tra_outputs, tra_labels)
         loss.backward()
 
-        # optimize
         if(epoch >= 0):
             for group in optimizer.param_groups:
                 for p in group['params']:
                     state = optimizer.state[p]
                     if('step' in state and state['step'] >= 1024):
-                        state['step'] = 1000    
-        
+                        state['step'] = 1000            
         optimizer.step()
 
         # training loss and accuracy
@@ -155,7 +152,7 @@ for epoch in range(num_epoches):
         _, predicted = torch.max(tra_outputs.data, 1)
         train_accuracy += (predicted == tra_labels).sum().item()
     
-    # test acc
+    # test accuracy
     with torch.no_grad():
         for tes_data in testloader:
             tes_image, tes_lab = tes_data
@@ -179,7 +176,6 @@ print("Training end")
 fileTesAcc.close()
 fileTraAcc.close()
 fileTraLoss.close()
-
 
 # Save model
 torch.save(newResNet.state_dict(), 'erchiResNet12.pt')
