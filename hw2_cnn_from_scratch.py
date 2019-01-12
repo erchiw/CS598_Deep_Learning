@@ -1,3 +1,5 @@
+"""cnn from scratch and image classification on mnist"""
+
 import numpy as np
 import h5py
 import time
