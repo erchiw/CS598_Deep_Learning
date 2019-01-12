@@ -1,7 +1,9 @@
+"""Using CNN to do classification on CIFAR10"""
+
 import torch
+import torchvision
 import torch.nn as nn
 import torch.nn.functional as F
-import torchvision
 import torchvision.transforms as transforms
 import torch.optim as optim
 import os
@@ -12,12 +14,12 @@ nameTes = os.getcwd() + "/" + "testErr.txt"
 trainErr = open(nameTra, "w")
 testErr = open(nameTes, "w")
 
-# Define data augmentation method
+# Define dara augmentation method
 rgb_mean = (0.5, 0.5, 0.5)
 rgb_std = (0.5, 0.5, 0.5)
 
 train_transform = transforms.Compose([
-    transforms.RandomCrop(32, padding=4)
+    transforms.RandomCrop(32, padding=4),
     transforms.RandomHorizontalFlip(p=0.2),
     transforms.ToTensor(),
     transforms.Normalize(rgb_mean, rgb_std),
@@ -25,7 +27,7 @@ train_transform = transforms.Compose([
 
 test_transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize(rgb_mean, rgb_std)])
 
-# Load CIFAR10 data
+# load CIFAR10 data
 trainset = torchvision.datasets.CIFAR10(root='./data', train=True,
                                         download=False, transform=train_transform)
 trainloader = torch.utils.data.DataLoader(trainset, batch_size=4,
@@ -40,7 +42,7 @@ classes = ('plane', 'car', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship'
 class CNNet(nn.Module):
     def __init__(self):
         super(CNNet, self).__init__()
-        self.conv1 = nn.Conv2d(in_channels=3, out_channels=64, kernel_size= (4,4), stride=(1,1), padding=2)
+        self.conv1 = nn.Conv2d(in_channels=3, out_channels=64, kernel_size=(4,4), stride=(1,1), padding=2)
         self.conv2 = nn.Conv2d(in_channels=64, out_channels=64, kernel_size=(4,4), stride=(1,1), padding=2)
         self.conv3 = nn.Conv2d(in_channels=64, out_channels=64, kernel_size=(4,4), stride=(1,1), padding=2)
         self.conv4 = nn.Conv2d(in_channels=64, out_channels=64, kernel_size=(4,4), stride=(1,1), padding=2)
@@ -98,7 +100,7 @@ num_epoch = 20
 
 for epoch in range(num_epoch):
     running_loss = 0.0
-    for i, data in enumerate(trainloader,0):
+    for i, data in enumerate(trainloader, 0):
         #input       
         inputs, labels = data
         
@@ -130,7 +132,6 @@ for epoch in range(num_epoch):
 
 print("training finish")
 
-
 # Test model
 correct = 0.0
 alltest = 0.0
@@ -152,24 +153,8 @@ testErr.write(str(100 * correct / alltest)+",")
 print("all finish")
 
 # Save model
-torch.save(net.state_dict(), 'erchinet12.pt')
+torch.save(net.state_dict(), 'cnn_erchi.pt')
 
 # Close File
 testErr.close()
 trainErr.close()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
